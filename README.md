@@ -1,9 +1,11 @@
 # vikunja-cli
 
-A **GitHub Copilot CLI skill** for managing [Vikunja](https://vikunja.io/) tasks,
+A portable **Agent Skill** for managing [Vikunja](https://vikunja.io/) tasks,
 projects, labels, comments, relations, and attachments via the Vikunja REST API.
+It is packaged around `SKILL.md` so agents that support the Agent Skills
+directory format, including Codex, Claude Code, and OpenCode, can load it.
 
-All output is JSON — making it easy for Copilot to parse and act on responses.
+All CLI output is JSON, making responses easy for coding agents to parse and act on.
 
 ---
 
@@ -21,53 +23,61 @@ All output is JSON — making it easy for Copilot to parse and act on responses.
 - Python 3.10+
 - A running Vikunja instance with an API token
 
-## Installation as a Copilot skill
+## Installation as an agent skill
 
-### 1. Clone this repo into your skills directory
+### 1. Clone this repo into your agent's skills directory
 
-**Personal skill** (available in all projects):
-
-```bash
-git clone https://github.com/YOUR_USERNAME/vikunja-cli ~/.copilot/skills/vikunja
-```
-
-**Project skill** (specific to one repository):
+Use the skills directory configured by your agent. Common layouts are:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/vikunja-cli .github/skills/vikunja
+# Codex
+git clone https://github.com/YOUR_USERNAME/vikunja-cli ~/.codex/skills/vikunja
+
+# Claude Code
+git clone https://github.com/YOUR_USERNAME/vikunja-cli ~/.claude/skills/vikunja
+
+# OpenCode
+git clone https://github.com/YOUR_USERNAME/vikunja-cli ~/.config/opencode/skills/vikunja
 ```
+
+For a project-local skill, clone this repository into the project-specific skills
+directory supported by your agent.
 
 ### 2. Install dependencies
 
 ```bash
-pip install -r ~/.copilot/skills/vikunja/requirements.txt
+pip install -r ~/.codex/skills/vikunja/requirements.txt
 ```
+
+Adjust the path if you installed the skill somewhere else.
 
 ### 3. Configure your Vikunja connection
 
 Get an API token from **Vikunja → Settings → API Tokens**, then:
 
 ```bash
-python ~/.copilot/skills/vikunja/vikunja.py config set \
+python3 ~/.codex/skills/vikunja/vikunja.py config set \
   --url https://your-vikunja-instance.com \
   --token YOUR_API_TOKEN
 ```
 
 This writes to `~/.vikunja.json` (permissions: `0600`).
 
-### 4. Reload skills in Copilot CLI
+### 4. Reload skills in your agent
 
-```
+```text
 /skills reload
 ```
 
-Or restart the CLI. The skill will appear in `/skills list` as `vikunja`.
+Or restart the agent if it does not support live skill reloads. The skill should
+appear as `vikunja`.
 
 ---
 
 ## Usage
 
-Copilot will automatically use this skill when you ask about Vikunja tasks and projects.
+Your agent should automatically use this skill when you ask about Vikunja tasks
+and projects.
 You can also invoke it directly:
 
 ```
@@ -77,22 +87,22 @@ Show me my overdue Vikunja tasks
 ### Direct CLI usage
 
 ```bash
-SKILL=~/.copilot/skills/vikunja
+SKILL=~/.codex/skills/vikunja
 
 # List projects
-python $SKILL/vikunja.py projects list
+python3 $SKILL/vikunja.py projects list
 
 # List overdue tasks
-python $SKILL/vikunja.py tasks list --filter "due_date < now && !done" --sort-by due_date
+python3 $SKILL/vikunja.py tasks list --filter "due_date < now && !done" --sort-by due_date
 
 # Create a task
-python $SKILL/vikunja.py tasks create --project-id 1 --title "Fix the bug" --priority 4
+python3 $SKILL/vikunja.py tasks create --project-id 1 --title "Fix the bug" --priority 4
 
 # Mark a task done
-python $SKILL/vikunja.py tasks update 42 --done true
+python3 $SKILL/vikunja.py tasks update 42 --done true
 
 # Download an attachment
-python $SKILL/vikunja.py attachments download --task-id 42 --attachment-id 7 --output-dir .
+python3 $SKILL/vikunja.py attachments download --task-id 42 --attachment-id 7 --output-dir .
 ```
 
 All commands output JSON. Errors look like:
@@ -127,8 +137,8 @@ Connection settings are stored in `~/.vikunja.json`:
 Manage with:
 
 ```bash
-python vikunja.py config set --url URL --token TOKEN
-python vikunja.py config show
+python3 vikunja.py config set --url URL --token TOKEN
+python3 vikunja.py config show
 ```
 
 ---

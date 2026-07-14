@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vikunja"
+  short_description: "Manage Vikunja tasks and projects"
+  default_prompt: "Use $vikunja to show my open Vikunja tasks due soon."
