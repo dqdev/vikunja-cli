@@ -6,6 +6,8 @@ It is packaged around `SKILL.md` so agents that support the Agent Skills
 directory format, including Codex, Claude Code, and OpenCode, can load it.
 
 All CLI output is JSON, making responses easy for coding agents to parse and act on.
+The CLI is implemented in Go and ships as a single binary with no runtime package
+installation step.
 
 ---
 
@@ -20,7 +22,7 @@ All CLI output is JSON, making responses easy for coding agents to parse and act
 
 ## Requirements
 
-- Python 3.10+
+- Go 1.22+ to build the binary, or a prebuilt `vikunja` binary
 - A running Vikunja instance with an API token
 
 ## Installation as an agent skill
@@ -43,10 +45,11 @@ git clone https://github.com/YOUR_USERNAME/vikunja-cli ~/.config/opencode/skills
 For a project-local skill, clone this repository into the project-specific skills
 directory supported by your agent.
 
-### 2. Install dependencies
+### 2. Build the CLI binary
 
 ```bash
-pip install -r ~/.codex/skills/vikunja/requirements.txt
+cd ~/.codex/skills/vikunja
+go build -o vikunja .
 ```
 
 Adjust the path if you installed the skill somewhere else.
@@ -56,7 +59,7 @@ Adjust the path if you installed the skill somewhere else.
 Get an API token from **Vikunja → Settings → API Tokens**, then:
 
 ```bash
-python3 ~/.codex/skills/vikunja/vikunja.py config set \
+~/.codex/skills/vikunja/vikunja config set \
   --url https://your-vikunja-instance.com \
   --token YOUR_API_TOKEN
 ```
@@ -90,19 +93,19 @@ Show me my overdue Vikunja tasks
 SKILL=~/.codex/skills/vikunja
 
 # List projects
-python3 $SKILL/vikunja.py projects list
+$SKILL/vikunja projects list
 
 # List overdue tasks
-python3 $SKILL/vikunja.py tasks list --filter "due_date < now && !done" --sort-by due_date
+$SKILL/vikunja tasks list --filter "due_date < now && !done" --sort-by due_date
 
 # Create a task
-python3 $SKILL/vikunja.py tasks create --project-id 1 --title "Fix the bug" --priority 4
+$SKILL/vikunja tasks create --project-id 1 --title "Fix the bug" --priority 4
 
 # Mark a task done
-python3 $SKILL/vikunja.py tasks update 42 --done true
+$SKILL/vikunja tasks update 42 --done true
 
 # Download an attachment
-python3 $SKILL/vikunja.py attachments download --task-id 42 --attachment-id 7 --output-dir .
+$SKILL/vikunja attachments download --task-id 42 --attachment-id 7 --output-dir .
 ```
 
 All commands output JSON. Errors look like:
@@ -137,8 +140,8 @@ Connection settings are stored in `~/.vikunja.json`:
 Manage with:
 
 ```bash
-python3 vikunja.py config set --url URL --token TOKEN
-python3 vikunja.py config show
+./vikunja config set --url URL --token TOKEN
+./vikunja config show
 ```
 
 ---
@@ -148,9 +151,8 @@ python3 vikunja.py config show
 ```bash
 git clone https://github.com/YOUR_USERNAME/vikunja-cli
 cd vikunja-cli
-pip install -e ".[dev]"
-pytest -v
-ruff check .
+go build -o vikunja .
+./vikunja config show
 ```
 
 ---
