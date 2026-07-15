@@ -9,7 +9,7 @@ Use the bundled Go CLI to operate on Vikunja. Run commands from this skill's
 base directory unless the `vikunja` binary is already on `PATH`.
 
 ```bash
-./vikunja <group> <command> [options]
+<skill-install-dir>/vikunja <group> <command> [options]
 ```
 
 All command output is JSON:
@@ -26,12 +26,12 @@ All command output is JSON:
 3. One-time config:
 
 ```bash
-./vikunja config set --url https://vikunja.example.com --token YOUR_API_TOKEN
+vikunja config set --url https://vikunja.example.com --token YOUR_API_TOKEN
 ```
 
 Config is stored as `.vikunja.json` in this skill's installed directory, next
 to the `vikunja` binary, with file mode `0600` when possible. Use
-`./vikunja config show` to confirm the URL; the token is masked.
+`vikunja config show` to confirm the URL; the token is masked.
 
 ## Agent Workflow
 
@@ -74,36 +74,36 @@ to the `vikunja` binary, with file mode `0600` when possible. Use
 
 ```bash
 # Save connection details
-./vikunja config set --url https://vikunja.example.com --token YOUR_API_TOKEN
+vikunja config set --url https://vikunja.example.com --token YOUR_API_TOKEN
 
 # Show current config (token masked)
-./vikunja config show
+vikunja config show
 ```
 
 ## projects — Project management
 
 ```bash
 # List projects (paginated)
-./vikunja projects list [--page N] [--per-page N] [--search TEXT] [--archived]
+vikunja projects list [--page N] [--per-page N] [--search TEXT] [--archived]
 
 # Get a single project
-./vikunja projects get PROJECT_ID
+vikunja projects get PROJECT_ID
 
 # Create a project
-./vikunja projects create --title "My Project" [--description TEXT] [--parent-id N]
+vikunja projects create --title "My Project" [--description TEXT] [--parent-id N]
 
 # Update a project
-./vikunja projects update PROJECT_ID [--title TEXT] [--description TEXT]
+vikunja projects update PROJECT_ID [--title TEXT] [--description TEXT]
 
 # Delete a project (and all its tasks)
-./vikunja projects delete PROJECT_ID
+vikunja projects delete PROJECT_ID
 ```
 
 ## tasks — Task management
 
 ```bash
 # List all tasks (optionally filtered)
-./vikunja tasks list \
+vikunja tasks list \
   [--project-id N] \
   [--page N] [--per-page N] \
   [--search TEXT] \
@@ -111,10 +111,10 @@ to the `vikunja` binary, with file mode `0600` when possible. Use
   [--sort-by due_date] [--order-by asc|desc]
 
 # Get a single task
-./vikunja tasks get TASK_ID
+vikunja tasks get TASK_ID
 
 # Create a task in a project
-./vikunja tasks create \
+vikunja tasks create \
   --project-id N \
   --title "Task title" \
   [--description TEXT] \
@@ -123,7 +123,7 @@ to the `vikunja` binary, with file mode `0600` when possible. Use
   [--label-ids 1,2,3]
 
 # Update a task (provide only fields to change)
-./vikunja tasks update TASK_ID \
+vikunja tasks update TASK_ID \
   [--title TEXT] \
   [--description TEXT] \
   [--due-date 2024-12-31T23:59:59Z] \
@@ -132,7 +132,7 @@ to the `vikunja` binary, with file mode `0600` when possible. Use
   [--percent-done 0.0-1.0]
 
 # Delete a task
-./vikunja tasks delete TASK_ID
+vikunja tasks delete TASK_ID
 ```
 
 ### Filter syntax
@@ -162,48 +162,48 @@ Use RFC3339 for dates: `2024-12-31T23:59:59Z` or
 
 ```bash
 # List all labels
-./vikunja labels list [--search TEXT] [--page N] [--per-page N]
+vikunja labels list [--search TEXT] [--page N] [--per-page N]
 
 # Get a label
-./vikunja labels get LABEL_ID
+vikunja labels get LABEL_ID
 
 # Create a label
-./vikunja labels create --title "Bug" [--color "#FF5733"] [--description TEXT]
+vikunja labels create --title "Bug" [--color "#FF5733"] [--description TEXT]
 
 # Update a label
-./vikunja labels update LABEL_ID [--title TEXT] [--color "#RRGGBB"] [--description TEXT]
+vikunja labels update LABEL_ID [--title TEXT] [--color "#RRGGBB"] [--description TEXT]
 
 # Delete a label
-./vikunja labels delete LABEL_ID
+vikunja labels delete LABEL_ID
 
 # Apply a label to a task
-./vikunja labels apply --task-id N --label-id N
+vikunja labels apply --task-id N --label-id N
 
 # Remove a label from a task
-./vikunja labels remove --task-id N --label-id N
+vikunja labels remove --task-id N --label-id N
 ```
 
 ## comments — Task comments
 
 ```bash
 # List comments on a task
-./vikunja comments list --task-id N
+vikunja comments list --task-id N
 
 # Add a comment
-./vikunja comments create --task-id N --text "Comment text (Markdown supported)"
+vikunja comments create --task-id N --text "Comment text (Markdown supported)"
 
 # Delete a comment
-./vikunja comments delete --task-id N --comment-id N
+vikunja comments delete --task-id N --comment-id N
 ```
 
 ## attachments — Task attachments
 
 ```bash
 # List attachment metadata for a task
-./vikunja attachments list --task-id N
+vikunja attachments list --task-id N
 
 # Download an attachment to disk
-./vikunja attachments download --task-id N --attachment-id N [--output-dir ./downloads]
+vikunja attachments download --task-id N --attachment-id N [--output-dir ./downloads]
 # Returns: {"data": {"saved_to": "/abs/path/to/file.pdf", "filename": "file.pdf"}}
 ```
 
@@ -214,36 +214,36 @@ Supported relation kinds: `subtask`, `parenttask`, `related`, `duplicateof`,
 
 ```bash
 # List all relations for a task
-./vikunja relations list TASK_ID
+vikunja relations list TASK_ID
 
 # Create a relation
-./vikunja relations create --task-id N --other-id N --kind subtask
+vikunja relations create --task-id N --other-id N --kind subtask
 
 # Delete a relation
-./vikunja relations delete --task-id N --other-id N --kind subtask
+vikunja relations delete --task-id N --other-id N --kind subtask
 ```
 
 ## Common workflows
 
 **Find overdue tasks:**
 ```bash
-./vikunja tasks list --filter "due_date < now && !done" --sort-by due_date
+vikunja tasks list --filter "due_date < now && !done" --sort-by due_date
 ```
 
 **Mark a task done:**
 ```bash
-./vikunja tasks update 42 --done true
+vikunja tasks update 42 --done true
 ```
 
 **Create a task with labels:**
 ```bash
-./vikunja tasks create --project-id 5 --title "Fix login bug" --label-ids 1,3 --priority 4
+vikunja tasks create --project-id 5 --title "Fix login bug" --label-ids 1,3 --priority 4
 ```
 
 **Download all attachments for a task:**
 ```bash
 # First list to get IDs
-./vikunja attachments list --task-id 42
+vikunja attachments list --task-id 42
 # Then download each one
-./vikunja attachments download --task-id 42 --attachment-id 7 --output-dir ./downloads
+vikunja attachments download --task-id 42 --attachment-id 7 --output-dir ./downloads
 ```
