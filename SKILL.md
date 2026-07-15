@@ -1,6 +1,6 @@
 ---
 name: vikunja
-description: Manage Vikunja tasks, projects, labels, comments, relations, and attachments through the bundled Go CLI and the Vikunja REST API. Use when the user asks to view, search, create, update, complete, delete, label, comment on, relate, or download attachments for Vikunja tasks or projects.
+description: Manage Vikunja tasks, projects, labels, comments, relations, and attachments through the bundled Go CLI and the Vikunja REST API. Use when the user asks to view, search, create, update, complete, delete, label, comment on, relate, triage, decompose, or download attachments for Vikunja tasks or projects.
 ---
 
 # Vikunja
@@ -44,6 +44,31 @@ to the `vikunja` binary, with file mode `0600` when possible. Use
   report or recover from.
 - Quote filter expressions in the shell, especially when they include `&&`,
   `||`, `<`, `>`, or `!`.
+- Apply the Task standards below whenever creating, updating, decomposing, or
+  interpreting tasks for AI or human execution.
+
+## Task standards
+
+- Every created task must have exactly one complexity label:
+  `complexity:simple`, `complexity:medium`, or `complexity:hard`.
+- Use `complexity:simple` for work a smaller/cheaper model such as GPT mini or
+  Claude Haiku can complete; use `complexity:medium` for work appropriate for a
+  frontier general model such as GPT-5.5 or Claude Sonnet; use
+  `complexity:hard` for work that needs the strongest available models, such as
+  Anthropic Fable or GPT-5.6.
+- Add the `Human-Only` label when the deliverable requires a human decision,
+  credential, approval, physical action, account ownership, legal judgment, or
+  other capability an AI agent cannot safely complete.
+- Create one task per deliverable target. The task must be granular enough to be
+  implemented on its own git branch, reviewed, and merged without blocking or
+  changing the scope of another task.
+- If a task cannot be started or finished until another task is done, mark it
+  blocked: add a `blocked` label if available, create a `blocked` relation from
+  the waiting task to each blocking task, and mention the blocking task IDs in
+  the description or a comment.
+- Before creating or applying required labels, search existing labels by exact
+  title. Create missing labels only when the user has not forbidden label
+  creation.
 
 ## config — Connection settings
 
