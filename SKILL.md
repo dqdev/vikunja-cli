@@ -29,7 +29,8 @@ All command output is JSON:
 ./vikunja config set --url https://vikunja.example.com --token YOUR_API_TOKEN
 ```
 
-Config is stored in `~/.vikunja.json` with file mode `0600` when possible. Use
+Config is stored as `.vikunja.json` in this skill's installed directory, next
+to the `vikunja` binary, with file mode `0600` when possible. Use
 `./vikunja config show` to confirm the URL; the token is masked.
 
 ## Agent Workflow

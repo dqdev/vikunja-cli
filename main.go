@@ -847,11 +847,15 @@ func saveConfig(cfg config) (string, error) {
 }
 
 func configPath() (string, error) {
-	home, err := os.UserHomeDir()
+	executable, err := os.Executable()
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(home, configFileName), nil
+	resolvedExecutable, err := filepath.EvalSymlinks(executable)
+	if err == nil {
+		executable = resolvedExecutable
+	}
+	return filepath.Join(filepath.Dir(executable), configFileName), nil
 }
 
 func newFlagSet(name string) *flag.FlagSet {

@@ -64,7 +64,8 @@ Get an API token from **Vikunja → Settings → API Tokens**, then:
   --token YOUR_API_TOKEN
 ```
 
-This writes to `~/.vikunja.json` (permissions: `0600`).
+This writes to `.vikunja.json` next to the installed `vikunja` binary
+(permissions: `0600`).
 
 ### 4. Reload skills in your agent
 
@@ -128,7 +129,8 @@ All commands output JSON. Errors look like:
 
 ## Configuration
 
-Connection settings are stored in `~/.vikunja.json`:
+Connection settings are stored in `.vikunja.json` next to the installed
+`vikunja` binary:
 
 ```json
 {
